@@ -1,15 +1,18 @@
-import { defineConfig } from 'vite'
+import { defineConfig, mergeConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { configDefaults } from 'vitest/config'
+import { configDefaults, defineConfig as defineVitestConfig } from 'vitest/config'
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  base: '/pallokalenteri/',
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
-    exclude: [...configDefaults.exclude, 'e2e/*']
-  }
-})
+export default mergeConfig(
+  defineConfig({
+    plugins: [react()],
+    base: '/pallokalenteri/',
+  }),
+  defineVitestConfig({
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/setupTests.ts',
+      exclude: [...configDefaults.exclude, 'e2e/*']
+    }
+  })
+)
