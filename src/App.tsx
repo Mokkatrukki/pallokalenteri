@@ -1,9 +1,22 @@
 import './App.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+const FIELD_PLAYERS_COUNT = 4;
+const TEAM_SIZE = 10; // Updated to 10 players
 
 function App() {
-  const [fieldPlayers, setFieldPlayers] = useState(['Player 1', 'Player 2', 'Player 3', 'Player 4']);
-  const [benchPlayers, setBenchPlayers] = useState(['Player 5', 'Player 6']);
+  const initialPlayers = Array.from({ length: TEAM_SIZE }, (_, i) => `Player ${i + 1}`);
+  const [fieldPlayers, setFieldPlayers] = useState(initialPlayers.slice(0, FIELD_PLAYERS_COUNT));
+  const [benchPlayers, setBenchPlayers] = useState(initialPlayers.slice(FIELD_PLAYERS_COUNT));
+
+  useEffect(() => {
+    if (fieldPlayers.length !== FIELD_PLAYERS_COUNT) {
+      const newFieldPlayers = fieldPlayers.slice(0, FIELD_PLAYERS_COUNT);
+      const newBenchPlayers = [...benchPlayers, ...fieldPlayers.slice(FIELD_PLAYERS_COUNT)];
+      setFieldPlayers(newFieldPlayers);
+      setBenchPlayers(newBenchPlayers);
+    }
+  }, [fieldPlayers, benchPlayers]);
 
   const handlePlayerClick = (player: string) => {
     setFieldPlayers(prevFieldPlayers => {
